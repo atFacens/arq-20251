@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.facens.projeto01.model.Client;
 import br.facens.projeto01.model.dto.ClientDTO;
 import br.facens.projeto01.service.ClientService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 
 @RestController
 @RequestMapping("/client")
@@ -39,7 +41,7 @@ public class ClientController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<Client> getClientByEmail(@PathVariable String email) {
+    public ResponseEntity<Client> getClientByEmail(@PathVariable @Email String email) {
 
         Optional<Client> optional = service.getClientByEmail(email);
 
@@ -72,8 +74,10 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<Client> createCliente(@RequestBody ClientDTO clientDTO) {
-        Client newClient = service.createClient(clientDTO);
+    public ResponseEntity<Client> createCliente(@RequestBody @Valid ClientDTO clientDTO) {
+        // Client newClient = service.createClient(clientDTO);
+        System.out.println("email: "+clientDTO.getEmail());
+        Client newClient = new Client();
 
         return new ResponseEntity<>(newClient, HttpStatus.CREATED);
     }
